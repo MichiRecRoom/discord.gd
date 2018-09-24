@@ -1,7 +1,6 @@
 extends "opcode_base.gd"
 
 # OPCODE UNKNOWN
-const CODE = -1
 
 # An unknown opcode. If this is used at all, it probably means that discord.gd
 # needs an update.

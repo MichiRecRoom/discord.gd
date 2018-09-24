@@ -18,7 +18,3 @@ And here's my secondary TODO list, for miscellaneous things I want to add. These
 
 - [ ] Voice connection support (if possible)
     - Not currently possible in GDScript (Can't stream Opus files; Can't encrypt without other addons)
-
-Godot has some issues that need to be ironed out before Discord.gd will work as expected:
-
-- [ ] https://github.com/godotengine/godot/issues/21617 - Discord.gd cannot send close frames, and is unable to read close frames. This means that your bot will time out if you close the engine, and you will be unable to read the close error code if the gateway closes your connection.

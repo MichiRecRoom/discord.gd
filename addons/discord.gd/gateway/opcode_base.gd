@@ -3,9 +3,6 @@
 # besides being used to form their respective payloads, double as handlers for
 # their respective opcodes, managing the gateway connection as needed.
 
-# @return [int] The Opcode's code
-const CODE = null
-
 func _init():
 	pass
 

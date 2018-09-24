@@ -1,7 +1,6 @@
 extends "opcode_base.gd"
 
 # OPCODE 9 - Invalid Session
-const CODE = 9
 
 # Reuse other OPCODE routines
 const IDENTIFY = preload('opcode_identify.gd')

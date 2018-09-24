@@ -83,6 +83,7 @@ func _ready():
 	client.connect("connection_error", self, "_on_connection_error")
 	client.connect("connection_established", self, "_on_connection_established")
 	client.connect("data_received", self, "_on_data_received")
+	client.connect("server_close_request", self, "_on_server_close_request")
 	#client.verify_ssl = false
 	
 
@@ -100,10 +101,7 @@ func gateway_reconnect(should_resume = false):
 	gateway_connect()
 
 func gateway_disconnect(will_resume = false):
-	#print('DISCONNECTING')
-	# Unfortunately Godot doesn't seem to send a close frame currently.
-	# So we can't disconnect gracefully, and Discord will see the client
-	# time out on their end after a while. Sorry!
+	print('DISCONNECTING')
 	client.disconnect_from_host()
 	
 	# Cleanup the connection
@@ -119,9 +117,13 @@ func connection():
 func bot():
 	return get_parent()
 
-func _on_connection_closed():
-	print('CONNECTION_CLOSED')
-	# Godot doesn't let us read the close event codes currently. Sorry!
+func _on_server_close_request(code, reason):
+	print("SERVER CLOSE REQUEST (")
+	print(" | code = ", code)
+	print(" | reason = ", reason)
+func _on_connection_closed(was_clean_close):
+	print("CONNECTION_CLOSED ")
+	print(" | was_clean_close = ", was_clean_close)
 	polling_timer.stop()
 	heartbeat_timer.stop()
 func _on_connection_error():

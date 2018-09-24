@@ -1,7 +1,6 @@
 extends "opcode_base.gd"
 
 # OPCODE 0 - Dispatch
-const CODE = 0
 
 func receive(connection, payload):
 	# Intercept any needed payloads

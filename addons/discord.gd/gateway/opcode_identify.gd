@@ -1,7 +1,6 @@
 extends "opcode_base.gd"
 
 # OPCODE 2 - Identify
-const CODE = 2
 
 func receive(connection, __):
 	# We can't receive this from Discord, so this does nothing.
@@ -13,7 +12,7 @@ func send(connection):
 	# TODO: Shard support
 	# TODO: Presence support
 	connection.put_payload({
-		op = CODE,
+		op = 2,
 		d = {
 			token = connection.bot().token,
 			properties = {

@@ -1,7 +1,6 @@
 extends "opcode_base.gd"
 
 # OPCODE 10 - Hello
-const CODE = 10
 
 # Reuse other OPCODE routines
 const HEARTBEAT = preload('opcode_heartbeat.gd')
