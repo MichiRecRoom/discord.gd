@@ -7,7 +7,6 @@ func receive(connection, __):
 	pass
 
 func send(connection):
-	# TODO: Compression support (shouldn't be hard)
 	# TODO: Configurable large_threshold
 	# TODO: Shard support
 	# TODO: Presence support
@@ -20,7 +19,7 @@ func send(connection):
 				"$browser": "discord.gd",
 				"$device": "discord.gd"
 			},
-			#compress = false,
+			#compress = true,
 			large_threshold = 250,
 			#shard = [0, 1],
 			#presence = {
