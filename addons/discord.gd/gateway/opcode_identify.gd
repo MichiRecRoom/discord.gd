@@ -19,7 +19,7 @@ func send(connection):
 				"$browser": "discord.gd",
 				"$device": "discord.gd"
 			},
-			#compress = true,
+			compress = true,
 			large_threshold = 250,
 			#shard = [0, 1],
 			#presence = {

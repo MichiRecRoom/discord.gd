@@ -89,7 +89,7 @@ func _ready():
 
 func gateway_connect():
 	print('(Re)Connecting to Discord...')
-	polling_timer.start(.1)
+	polling_timer.start(.01)
 	# TODO: Get Gateway endpoint from API
 	client.connect_to_url('wss://gateway.discord.gg/?v=6&encoding=json')
 
@@ -135,22 +135,42 @@ func _on_connection_established(protocol):
 	print('CONNECTION ESTABLISHED: ', protocol)
 func _on_data_received():
 	var pc = connection().get_available_packet_count()
+	#print('PACKETS RECEIVED: ', pc)
 	for __ in range(pc):
 		var data = get_payload()
-		print(" -> ", data)
-		
-		var payload = parse_json(data)
-		var payload_op = int(payload.op)
-		
-		if PAYLOADS.has(payload_op):
-			# Don't do anything if we haven't added a script for that number
-			if PAYLOADS[payload_op]:
-				PAYLOADS[payload_op].new().receive(self, payload)
-		else:
-			PAYLOADS.UNKNOWN.new().receive(self, payload)
+		if data:
+			print(" -> ", data)
+			
+			var payload = parse_json(data)
+			var payload_op = int(payload.op)
+			
+			if PAYLOADS.has(payload_op):
+				# Don't do anything if we haven't added a script for that number
+				if PAYLOADS[payload_op]:
+					PAYLOADS[payload_op].new().receive(self, payload)
+			else:
+				PAYLOADS.UNKNOWN.new().receive(self, payload)
 
 func get_payload():
-	return connection().get_packet().get_string_from_utf8()
+	var payload = connection().get_packet()	
+	
+	# Validate JSON -- if it fails, it might be a compressed payload
+	#if (payload[0] != 123) && (payload[payload.size()-1] != 125):
+	if payload[0] == 120:
+		payload = decompress_payload(payload)
+	
+	# Validate once more -- if it fails, maybe something went wrong when decoding the payload?
+	if validate_json(payload.get_string_from_utf8()) == '':
+		return payload.get_string_from_utf8()
+	else:
+		payload = decompress_payload(payload)
+		print(" -> ", "Couldn't decode packet.")
+		return null
+
+func decompress_payload(payload, buffer_size_multiplier = 10):
+	# We use a 16MB max buffer size by default, for those really big payloads.
+	# Feel free to adjust this if it's not enough.
+	return payload.decompress(1024 * 1024 * 16, File.COMPRESSION_DEFLATE)
 
 func put_payload(payload_dict):
 	var j = to_json(payload_dict)
